@@ -1,0 +1,58 @@
+/* responsive start */
+@media only screen and (max-width: 1200px) {
+	/* header */
+	.ul-wrapper {
+		gap: 20px;
+	}
+	.list-item {
+		font-size: 16px;
+	}
+
+	.head-title {
+		font-size: 70px;
+		line-height: 100px;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	.getNone {
+		display: none;
+	}
+
+	.getBlock {
+		display: block;
+	}
+
+	.overallTitle {
+		font-size: 64px;
+		line-height: 85px;
+	}
+
+	/* header */
+	.header {
+		padding-left: 20px;
+		padding-right: 20px;
+		margin-bottom: 200px;
+	}
+
+	.overallBtn {
+		font-size: 13px;
+		line-height: 16.77px;
+	}
+
+	.head-img {
+		width: 50px;
+		height: 45px;
+	}
+	.burgerButton {
+		width: 40px;
+		height: 23px;
+	}
+}
+
+@media only screen and (max-width: 460px) {
+	.header {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}

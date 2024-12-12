@@ -1,0 +1,166 @@
+/* responsive start */
+@media only screen and (max-width: 1200px) {
+	/* header */
+	.ul-wrapper {
+		gap: 20px;
+	}
+	.list-item {
+		font-size: 16px;
+	}
+
+	.head-title {
+		font-size: 70px;
+		line-height: 100px;
+	}
+
+	/* footer */
+	.footer {
+		flex-wrap: wrap;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	.getNone {
+		display: none;
+	}
+
+	.getBlock {
+		display: block;
+	}
+
+	.overallTitle {
+		font-size: 64px;
+		line-height: 85px;
+	}
+
+	/* header */
+	.header {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+
+	/* footer */
+	.footer {
+		padding: 45px 10px;
+		border-radius: 60px 60px 0 0;
+		padding-bottom: 100px;
+		margin-top: 150px;
+	}
+	.footer-right {
+		width: 100%;
+	}
+	.bottom-list {
+		font-size: 15px;
+		line-height: 19.35px;
+		font-weight: 500;
+		margin-top: 20px;
+	}
+	.send-wrapper {
+		flex-wrap: wrap;
+		width: 100%;
+	}
+
+	.send-btn {
+		width: 100%;
+		padding: 25px 30px;
+	}
+
+	.send-desc {
+		max-width: 600px;
+		margin: 0 auto;
+		text-align: center;
+		font-size: 13px;
+		line-height: 16.77px;
+	}
+
+	.footer-right,
+	.inputs-wrapper {
+		margin-top: 0px;
+	}
+
+	.input,
+	.location,
+	.send-desc {
+		font-size: 13px;
+		line-height: 16.77px;
+		font-weight: 300;
+	}
+
+	.send-desc {
+		font-weight: 400;
+	}
+
+	.footer-left {
+		width: 100%;
+	}
+
+	.arrow-top {
+		width: 67px;
+	}
+	.address {
+		max-width: 250px;
+	}
+
+	.app-logo:nth-child(1) {
+		width: 16.33px;
+		height: 30.73px;
+	}
+	.app-logo:nth-child(2) {
+		width: 29.43px;
+	}
+	.app-logo:nth-child(3) {
+		width: 29.57px;
+		height: 20.77px;
+	}
+	/* footer end */
+
+	.overallBtn {
+		font-size: 13px;
+		line-height: 16.77px;
+	}
+}
+
+@media only screen and (max-width: 460px) {
+	.header {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+@media only screen and (max-width: 376px) {
+	.noneAdaptive {
+		display: none;
+	}
+	.blockAdaptive {
+		display: block;
+	}
+
+	.address {
+		max-width: 180px;
+	}
+
+	.footer {
+		padding-bottom: 25px;
+	}
+}
+
+/* main responsive starts from here */
+@media only screen and (max-width: 768px) {
+	.cases-wrapper {
+		margin: 150px 20px;
+	}
+	.cases-body {
+		flex-direction: column;
+	}
+	.case-item {
+		width: 100%;
+	}
+
+	.main-title {
+		font-size: 43px;
+		line-height: 60px;
+	}
+	.generalTitle {
+		font-size: 35px;
+	}
+}
