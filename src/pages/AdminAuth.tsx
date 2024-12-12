@@ -25,9 +25,9 @@ const AdminAuth = () => {
 	const [newPassword, setNewPassword] = useState("");
 
 	const theRest = "@gmail.com";
-	let notRealLogin = newLogin;
-	let realLogin = notRealLogin + theRest;
-	let realPassword = newPassword;
+	const notRealLogin = newLogin;
+	const realLogin = notRealLogin + theRest;
+	const realPassword = newPassword;
 
 	const loginPassword = collection(db, "loginPassword");
 	const [isLoading, setIsLoading] = useState(false);

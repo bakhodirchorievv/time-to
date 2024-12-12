@@ -1,5 +1,5 @@
-import "./Television.css";
-import "./TeleResponsive.css";
+// import "./Television.css";
+// import "./TeleResponsive.css";
 import "../styles/Television/Television.css";
 import "../styles/Television/TeleResponsive.css";
 
@@ -13,9 +13,9 @@ const Television = () => {
 						на телевидении
 					</h2>
 					<p className="title-desc">
-						Компания "Наша Реклама" рада представить вам новую возможность для
-						эффективного продвижения вашего бренда! Теперь вы можете разместить
-						свою рекламу на самых популярных телеканалах!
+						Компания &quot;Наша Реклама&quot; рада представить вам новую
+						возможность для эффективного продвижения вашего бренда! Теперь вы
+						можете разместить свою рекламу на самых популярных телеканалах!
 					</p>
 				</div>
 

@@ -19,7 +19,7 @@ interface BrandStrategyCard {
 }
 
 const BrandStrategy = () => {
-	const scrollContainerRef: any = useRef(null);
+	const scrollContainerRef = useRef<HTMLDivElement>(null);
 
 	const handleScrollRight = () => {
 		if (scrollContainerRef.current) {

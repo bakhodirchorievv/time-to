@@ -146,10 +146,34 @@ const MmainPage = () => {
 	// animation end
 
 	// service info events start
-	const showServiceInfo = (e: any) => {
-		const target = e.target.parentElement.querySelector(".service-info");
-		const minus = e.target.parentElement.querySelector(".minus");
-		const plus = e.target.parentElement.querySelector(".plus");
+	// const showServiceInfo = (e: any) => {
+	// 	const target = e.target.parentElement.querySelector(".service-info");
+	// 	const minus = e.target.parentElement.querySelector(".minus");
+	// 	const plus = e.target.parentElement.querySelector(".plus");
+
+	// 	if (target.classList.contains("disappearWithAnimation")) {
+	// 		target.classList.remove("disappearWithAnimation");
+	// 		target.classList.add("appearWithAnimation");
+	// 		minus.classList.remove("disappearWithAnimation");
+	// 		plus.classList.add("disappearWithAnimation");
+	// 	} else {
+	// 		target.classList.add("disappearWithAnimation");
+	// 		target.classList.remove("appearWithAnimation");
+	// 		minus.classList.add("disappearWithAnimation");
+	// 		plus.classList.remove("disappearWithAnimation");
+	// 	}
+	// };
+
+	const showServiceInfo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		const target =
+			e.currentTarget.parentElement?.querySelector(".service-info");
+		const minus = e.currentTarget.parentElement?.querySelector(".minus");
+		const plus = e.currentTarget.parentElement?.querySelector(".plus");
+
+		if (!target || !minus || !plus) {
+			console.warn("Required elements not found");
+			return;
+		}
 
 		if (target.classList.contains("disappearWithAnimation")) {
 			target.classList.remove("disappearWithAnimation");
@@ -163,11 +187,46 @@ const MmainPage = () => {
 			plus.classList.remove("disappearWithAnimation");
 		}
 	};
-	const showServiceInfo2 = (e: any) => {
-		const target =
-			e.target.parentElement.parentElement.querySelector(".service-info");
-		const minus = e.target.parentElement.parentElement.querySelector(".minus");
-		const plus = e.target.parentElement.parentElement.querySelector(".plus");
+
+	// const showServiceInfo2 = (e: any) => {
+	// 	const target =
+	// 		e.target.parentElement.parentElement.querySelector(".service-info");
+	// 	const minus = e.target.parentElement.parentElement.querySelector(".minus");
+	// 	const plus = e.target.parentElement.parentElement.querySelector(".plus");
+	// 	if (target.classList.contains("disappearWithAnimation")) {
+	// 		target.classList.remove("disappearWithAnimation");
+	// 		target.classList.add("appearWithAnimation");
+	// 		minus.classList.remove("disappearWithAnimation");
+	// 		plus.classList.add("disappearWithAnimation");
+	// 	} else {
+	// 		target.classList.add("disappearWithAnimation");
+	// 		target.classList.remove("appearWithAnimation");
+	// 		minus.classList.add("disappearWithAnimation");
+	// 		plus.classList.remove("disappearWithAnimation");
+	// 	}
+	// };
+
+	// packing items click
+
+	const showServiceInfo2 = (
+		e: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
+		const parentElement = e.currentTarget.parentElement?.parentElement;
+
+		if (!parentElement) {
+			console.warn("Parent element not found");
+			return;
+		}
+
+		const target = parentElement.querySelector(".service-info");
+		const minus = parentElement.querySelector(".minus");
+		const plus = parentElement.querySelector(".plus");
+
+		if (!target || !minus || !plus) {
+			console.warn("Required elements not found");
+			return;
+		}
+
 		if (target.classList.contains("disappearWithAnimation")) {
 			target.classList.remove("disappearWithAnimation");
 			target.classList.add("appearWithAnimation");
@@ -182,55 +241,113 @@ const MmainPage = () => {
 	};
 
 	// packing items click
-	const handlePackingItem = (e: any) => {
-		let target = e.target;
+	// const handlePackingItem = (e: any) => {
+	// 	let target = e.target;
+
+	// 	if (
+	// 		e.target.classList.contains("packing-item-title") ||
+	// 		e.target.classList.contains("pack-price") ||
+	// 		e.target.classList.contains("blackLine") ||
+	// 		e.target.classList.contains("list-wrapper") ||
+	// 		e.target.classList.contains("packing-btn") ||
+	// 		e.target.classList.contains("overallBtn")
+	// 	) {
+	// 		target = e.target.parentElement;
+	// 	} else if (e.target.classList.contains("packing-list")) {
+	// 		target = e.target.parentElement.parentElement;
+	// 	}
+
+	// 	if (target.className === "packing-item") {
+	// 		const packingItems = document.querySelectorAll(".packing-item");
+	// 		packingItems.forEach((item) => {
+	// 			item.classList.remove("packing-item-click");
+
+	// 			const title = item.querySelector(".packing-item-title") as HTMLElement;
+	// 			const price = item.querySelector(".pack-price") as HTMLElement;
+	// 			const packingBtn = item.querySelector(".packing-btn") as HTMLElement;
+	// 			const list = item.querySelectorAll(".packing-list");
+	// 			title.classList.remove("packing-list-click");
+	// 			price.classList.remove("packing-list-click");
+	// 			packingBtn.classList.remove("packing-btn-click");
+	// 			list.forEach(
+	// 				(element: { classList: { remove: (arg0: string) => void } }) => {
+	// 					element.classList.remove("packing-list-click");
+	// 				}
+	// 			);
+	// 		});
+
+	// 		target.classList.add("packing-item-click");
+
+	// 		const title = target.querySelector(".packing-item-title");
+	// 		const price = target.querySelector(".pack-price");
+	// 		const packingBtn = target.querySelector(".packing-btn");
+	// 		const list = target.querySelectorAll(".packing-list");
+	// 		title.classList.add("packing-list-click");
+	// 		price.classList.add("packing-list-click");
+	// 		packingBtn.classList.add("packing-btn-click");
+	// 		list.forEach(
+	// 			(element: { classList: { add: (arg0: string) => void } }) => {
+	// 				element.classList.add("packing-list-click");
+	// 			}
+	// 		);
+	// 	}
+	// };
+	const handlePackingItem = (e: React.MouseEvent<HTMLElement>) => {
+		let target = e.target as HTMLElement;
 
 		if (
-			e.target.classList.contains("packing-item-title") ||
-			e.target.classList.contains("pack-price") ||
-			e.target.classList.contains("blackLine") ||
-			e.target.classList.contains("list-wrapper") ||
-			e.target.classList.contains("packing-btn") ||
-			e.target.classList.contains("overallBtn")
+			target.classList.contains("packing-item-title") ||
+			target.classList.contains("pack-price") ||
+			target.classList.contains("blackLine") ||
+			target.classList.contains("list-wrapper") ||
+			target.classList.contains("packing-btn") ||
+			target.classList.contains("overallBtn")
 		) {
-			target = e.target.parentElement;
-		} else if (e.target.classList.contains("packing-list")) {
-			target = e.target.parentElement.parentElement;
+			target = target.parentElement as HTMLElement;
+		} else if (target.classList.contains("packing-list")) {
+			target = target.parentElement?.parentElement as HTMLElement;
 		}
 
-		if (target.className === "packing-item") {
+		if (target?.className === "packing-item") {
 			const packingItems = document.querySelectorAll(".packing-item");
+
 			packingItems.forEach((item) => {
 				item.classList.remove("packing-item-click");
 
-				const title = item.querySelector(".packing-item-title") as HTMLElement;
-				const price = item.querySelector(".pack-price") as HTMLElement;
-				const packingBtn = item.querySelector(".packing-btn") as HTMLElement;
+				const title = item.querySelector(
+					".packing-item-title"
+				) as HTMLElement | null;
+				const price = item.querySelector(".pack-price") as HTMLElement | null;
+				const packingBtn = item.querySelector(
+					".packing-btn"
+				) as HTMLElement | null;
 				const list = item.querySelectorAll(".packing-list");
-				title.classList.remove("packing-list-click");
-				price.classList.remove("packing-list-click");
-				packingBtn.classList.remove("packing-btn-click");
-				list.forEach(
-					(element: { classList: { remove: (arg0: string) => void } }) => {
-						element.classList.remove("packing-list-click");
-					}
-				);
+
+				title?.classList.remove("packing-list-click");
+				price?.classList.remove("packing-list-click");
+				packingBtn?.classList.remove("packing-btn-click");
+				list.forEach((element) => {
+					element.classList.remove("packing-list-click");
+				});
 			});
 
 			target.classList.add("packing-item-click");
 
-			const title = target.querySelector(".packing-item-title");
-			const price = target.querySelector(".pack-price");
-			const packingBtn = target.querySelector(".packing-btn");
+			const title = target.querySelector(
+				".packing-item-title"
+			) as HTMLElement | null;
+			const price = target.querySelector(".pack-price") as HTMLElement | null;
+			const packingBtn = target.querySelector(
+				".packing-btn"
+			) as HTMLElement | null;
 			const list = target.querySelectorAll(".packing-list");
-			title.classList.add("packing-list-click");
-			price.classList.add("packing-list-click");
-			packingBtn.classList.add("packing-btn-click");
-			list.forEach(
-				(element: { classList: { add: (arg0: string) => void } }) => {
-					element.classList.add("packing-list-click");
-				}
-			);
+
+			title?.classList.add("packing-list-click");
+			price?.classList.add("packing-list-click");
+			packingBtn?.classList.add("packing-btn-click");
+			list.forEach((element) => {
+				element.classList.add("packing-list-click");
+			});
 		}
 	};
 
