@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./SiteCard.css";
-import "../../styles/AdminDashboard/SiteCard/SiteCard.css";
+// import "../../styles/AdminDashboard/SiteCard/SiteCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface SiteCard {
 	id: string;
@@ -207,139 +208,147 @@ const SiteCard = () => {
 	};
 
 	return (
-		<div className="SiteCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/SiteCard/SiteCard.css"
+				/>
+			</Head>
+			<div className="SiteCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addSiteCardTitle">Add New Site Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Site Card title..."
-							value={newSiteCardTitle}
-							onChange={(e) => setnewSiteCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Site Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewSiteCardImage(e.target.files ? e.target.files[0] : null)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitSiteCard}
-							disabled={isLoading}
-						>
-							Submit Site Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addSiteCardTitle">Add New Site Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Site Card title..."
+								value={newSiteCardTitle}
+								onChange={(e) => setnewSiteCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Site Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewSiteCardImage(e.target.files ? e.target.files[0] : null)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitSiteCard}
+								disabled={isLoading}
+							>
+								Submit Site Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{SiteCardList.map((SiteCard) => (
-								<div className="SiteCardItemWrapperFire" key={SiteCard.id}>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{SiteCard.title}</h1>
-											<p>{SiteCard.desc}</p>
-											{SiteCard.imageUrl && (
-												<img
-													className="SiteCardImgFire"
-													src={SiteCard.imageUrl}
-													alt={SiteCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{SiteCardList.map((SiteCard) => (
+									<div className="SiteCardItemWrapperFire" key={SiteCard.id}>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{SiteCard.title}</h1>
+												<p>{SiteCard.desc}</p>
+												{SiteCard.imageUrl && (
+													<img
+														className="SiteCardImgFire"
+														src={SiteCard.imageUrl}
+														alt={SiteCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteSiteCard(SiteCard.id, SiteCard.imageUrl)
+													}
+												>
+													Delete Site Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteSiteCard(SiteCard.id, SiteCard.imageUrl)
-												}
-											>
-												Delete Site Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(SiteCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(SiteCard.id, SiteCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(SiteCard.id, SiteCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(SiteCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(SiteCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(SiteCard.id, SiteCard.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(SiteCard.id, SiteCard.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(SiteCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

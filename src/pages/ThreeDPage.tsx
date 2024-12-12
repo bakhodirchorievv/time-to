@@ -1,9 +1,20 @@
-import "../styles/ThreeDPage/ThreeDPage.css";
-import "../styles/ThreeDPage/ThreeDPageResponsive.css";
+// import "../styles/ThreeDPage/ThreeDPage.css";
+// import "../styles/ThreeDPage/ThreeDPageResponsive.css";
+
+import Head from "next/head";
 
 const ThreeDPage = () => {
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/ThreeDPage/ThreeDPage.css" />
+			</Head>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/ThreeDPage/ThreeDPageResponsive.css"
+				/>
+			</Head>
 			<div className="threeD-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

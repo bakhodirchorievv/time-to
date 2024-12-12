@@ -1,11 +1,12 @@
-import "../styles/OCompany/Ocompany.css";
-import "../styles/OCompany/OCompanyResponsive.css";
+// import "../styles/OCompany/Ocompany.css";
+// import "../styles/OCompany/OCompanyResponsive.css";
 import Link from "next/link";
 // get data from firebase for our team
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface OurTeam {
 	id: string;
@@ -81,6 +82,12 @@ const OCompany = () => {
 
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/OCompany/Ocompany.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/OCompany/OCompanyResponsive.css" />
+			</Head>
 			<div className="OCompany-wrapper">
 				<div className="timeToWrapper hidden">
 					<h2 className="timeToTitle">

@@ -1,12 +1,13 @@
 import Link from "next/link";
-import "../styles/Card/Card.css";
-import "../styles/Card/CardResponsive.css";
+// import "../styles/Card/Card.css";
+// import "../styles/Card/CardResponsive.css";
 // get data from firebase
 // import { db } from "../../Components/AdminDashboard/FirebaseConfig";
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface VizitkaCard {
 	id: string;
@@ -45,6 +46,12 @@ const Card = () => {
 	}, []);
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Card/Card.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Card/CardResponsive.css" />
+			</Head>
 			<div className="card-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

@@ -1,9 +1,10 @@
 import Link from "next/link";
 
-import "../styles/Mmain/MmainPage.css";
-import "../styles/Mmain/Mmresponsive.css";
+// import "../styles/Mmain/MmainPage.css";
+// import "../styles/Mmain/Mmresponsive.css";
 import { useEffect, useRef, useState } from "react";
 import CasesPart from "./CasesPart";
+import Head from "next/head";
 
 const MmainPage = () => {
 	//  video controol start
@@ -433,6 +434,13 @@ const MmainPage = () => {
 
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Mmain/MmainPage.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Mmain/Mmresponsive.css" />
+			</Head>
+
 			<div className="cursor-dot"></div>
 			<div className="cursor-outline"></div>
 			<div className="bottomOfHeader">

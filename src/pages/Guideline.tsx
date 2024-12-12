@@ -1,11 +1,12 @@
 import Link from "next/link";
-import "../styles/Guideline/Guideline.css";
-import "../styles/Guideline/GuidelineResposive.css";
+// import "../styles/Guideline/Guideline.css";
+// import "../styles/Guideline/GuidelineResposive.css";
 // get data from firebase
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface GuidelineCard {
 	id: string;
@@ -46,6 +47,15 @@ const Guideline = () => {
 	}, []);
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Guideline/Guideline.css" />
+			</Head>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/Guideline/GuidelineResposive.css"
+				/>
+			</Head>
 			<div className="guidline-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

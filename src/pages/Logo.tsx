@@ -1,11 +1,12 @@
 import Link from "next/link";
-import "../styles/Logo/Logo.css";
-import "../styles/Logo/LogoResponsive.css";
+// import "../styles/Logo/Logo.css";
+// import "../styles/Logo/LogoResponsive.css";
 // get data from firebase
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface LogoCard {
 	id: string;
@@ -44,6 +45,12 @@ const Logo = () => {
 	}, []);
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Logo/Logo.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Logo/LogoResponsive.css" />
+			</Head>
 			<div className="logo-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">Логотип</h2>

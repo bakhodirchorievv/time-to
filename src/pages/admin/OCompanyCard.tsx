@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./OCompanyCard.css";
-import "../../styles/AdminDashboard/OCompanyCard/OCompanyCard.css";
+// import "../../styles/AdminDashboard/OCompanyCard/OCompanyCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface OCompanyCard {
 	id: string;
@@ -207,147 +208,161 @@ const OCompanyCard = () => {
 	};
 
 	return (
-		<div className="OCompanyCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/OCompanyCard/OCompanyCard.css"
+				/>
+			</Head>
+			<div className="OCompanyCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addOCompanyCardTitle">Add New OCompany Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="OCompany Card title..."
-							value={newOCompanyCardTitle}
-							onChange={(e) => setnewOCompanyCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="OCompany Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewOCompanyCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitOCompanyCard}
-							disabled={isLoading}
-						>
-							Submit OCompany Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addOCompanyCardTitle">Add New OCompany Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="OCompany Card title..."
+								value={newOCompanyCardTitle}
+								onChange={(e) => setnewOCompanyCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="OCompany Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewOCompanyCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitOCompanyCard}
+								disabled={isLoading}
+							>
+								Submit OCompany Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{OCompanyCardList.map((OCompanyCard) => (
-								<div
-									className="OCompanyCardItemWrapperFire"
-									key={OCompanyCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{OCompanyCard.title}</h1>
-											<p>{OCompanyCard.desc}</p>
-											{OCompanyCard.imageUrl && (
-												<img
-													className="OCompanyCardImgFire"
-													src={OCompanyCard.imageUrl}
-													alt={OCompanyCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{OCompanyCardList.map((OCompanyCard) => (
+									<div
+										className="OCompanyCardItemWrapperFire"
+										key={OCompanyCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{OCompanyCard.title}</h1>
+												<p>{OCompanyCard.desc}</p>
+												{OCompanyCard.imageUrl && (
+													<img
+														className="OCompanyCardImgFire"
+														src={OCompanyCard.imageUrl}
+														alt={OCompanyCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteOCompanyCard(
+															OCompanyCard.id,
+															OCompanyCard.imageUrl
+														)
+													}
+												>
+													Delete OCompany Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteOCompanyCard(
-														OCompanyCard.id,
-														OCompanyCard.imageUrl
-													)
-												}
-											>
-												Delete OCompany Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(OCompanyCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(OCompanyCard.id, OCompanyCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(OCompanyCard.id, OCompanyCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(OCompanyCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
-			</div>
-		</div>
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(OCompanyCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(
+															OCompanyCard.id,
+															OCompanyCard.imageUrl
+														)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(
+															OCompanyCard.id,
+															OCompanyCard.imageUrl
+														)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(OCompanyCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
+			</div>{" "}
+		</>
 	);
 };
 

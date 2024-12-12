@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./PartnerCard.css";
-import "../../styles/AdminDashboard/PartnerCard/PartnerCard.css";
+// import "../../styles/AdminDashboard/PartnerCard/PartnerCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface PartnerCard {
 	id: string;
@@ -209,147 +210,155 @@ const PartnerCard = () => {
 	};
 
 	return (
-		<div className="PartnerCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/PartnerCard/PartnerCard.css"
+				/>
+			</Head>
+			<div className="PartnerCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addPartnerCardTitle">Add New Partner Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Partner Card title..."
-							value={newPartnerCardTitle}
-							onChange={(e) => setnewPartnerCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Partner Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewPartnerCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitPartnerCard}
-							disabled={isLoading}
-						>
-							Submit Partner Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addPartnerCardTitle">Add New Partner Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Partner Card title..."
+								value={newPartnerCardTitle}
+								onChange={(e) => setnewPartnerCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Partner Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewPartnerCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitPartnerCard}
+								disabled={isLoading}
+							>
+								Submit Partner Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{PartnerCardList.map((PartnerCard) => (
-								<div
-									className="PartnerCardItemWrapperFire"
-									key={PartnerCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{PartnerCard.title}</h1>
-											<p>{PartnerCard.desc}</p>
-											{PartnerCard.imageUrl && (
-												<img
-													className="PartnerCardImgFire"
-													src={PartnerCard.imageUrl}
-													alt={PartnerCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{PartnerCardList.map((PartnerCard) => (
+									<div
+										className="PartnerCardItemWrapperFire"
+										key={PartnerCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{PartnerCard.title}</h1>
+												<p>{PartnerCard.desc}</p>
+												{PartnerCard.imageUrl && (
+													<img
+														className="PartnerCardImgFire"
+														src={PartnerCard.imageUrl}
+														alt={PartnerCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deletePartnerCard(
+															PartnerCard.id,
+															PartnerCard.imageUrl
+														)
+													}
+												>
+													Delete Partner Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deletePartnerCard(
-														PartnerCard.id,
-														PartnerCard.imageUrl
-													)
-												}
-											>
-												Delete Partner Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(PartnerCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(PartnerCard.id, PartnerCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(PartnerCard.id, PartnerCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(PartnerCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(PartnerCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(PartnerCard.id, PartnerCard.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(PartnerCard.id, PartnerCard.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(PartnerCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

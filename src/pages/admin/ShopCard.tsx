@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./ShopCard.css";
-import "../../styles/AdminDashboard/ShopCard/ShopCard.css";
+// import "../../styles/AdminDashboard/ShopCard/ShopCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface ShopCard {
 	id: string;
@@ -207,139 +208,147 @@ const ShopCard = () => {
 	};
 
 	return (
-		<div className="ShopCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/ShopCard/ShopCard.css"
+				/>
+			</Head>
+			<div className="ShopCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addShopCardTitle">Add New Shop Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Shop Card title..."
-							value={newShopCardTitle}
-							onChange={(e) => setnewShopCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Shop Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewShopCardImage(e.target.files ? e.target.files[0] : null)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitShopCard}
-							disabled={isLoading}
-						>
-							Submit Shop Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addShopCardTitle">Add New Shop Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Shop Card title..."
+								value={newShopCardTitle}
+								onChange={(e) => setnewShopCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Shop Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewShopCardImage(e.target.files ? e.target.files[0] : null)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitShopCard}
+								disabled={isLoading}
+							>
+								Submit Shop Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{ShopCardList.map((ShopCard) => (
-								<div className="ShopCardItemWrapperFire" key={ShopCard.id}>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{ShopCard.title}</h1>
-											<p>{ShopCard.desc}</p>
-											{ShopCard.imageUrl && (
-												<img
-													className="ShopCardImgFire"
-													src={ShopCard.imageUrl}
-													alt={ShopCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{ShopCardList.map((ShopCard) => (
+									<div className="ShopCardItemWrapperFire" key={ShopCard.id}>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{ShopCard.title}</h1>
+												<p>{ShopCard.desc}</p>
+												{ShopCard.imageUrl && (
+													<img
+														className="ShopCardImgFire"
+														src={ShopCard.imageUrl}
+														alt={ShopCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteShopCard(ShopCard.id, ShopCard.imageUrl)
+													}
+												>
+													Delete Shop Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteShopCard(ShopCard.id, ShopCard.imageUrl)
-												}
-											>
-												Delete Shop Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(ShopCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(ShopCard.id, ShopCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(ShopCard.id, ShopCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(ShopCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(ShopCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(ShopCard.id, ShopCard.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(ShopCard.id, ShopCard.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(ShopCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

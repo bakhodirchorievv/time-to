@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./RadioCard.css";
-import "../../styles/AdminDashboard/RadioCard/RadioCard.css";
+// import "../../styles/AdminDashboard/RadioCard/RadioCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface RadioCard {
 	id: string;
@@ -206,139 +207,149 @@ const RadioCard = () => {
 	};
 
 	return (
-		<div className="RadioCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/RadioCard/RadioCard.css"
+				/>
+			</Head>
+			<div className="RadioCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addRadioCardTitle">Add New Radio Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Radio Card title..."
-							value={newRadioCardTitle}
-							onChange={(e) => setnewRadioCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Radio Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewRadioCardImage(e.target.files ? e.target.files[0] : null)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitRadioCard}
-							disabled={isLoading}
-						>
-							Submit Radio Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addRadioCardTitle">Add New Radio Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Radio Card title..."
+								value={newRadioCardTitle}
+								onChange={(e) => setnewRadioCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Radio Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewRadioCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitRadioCard}
+								disabled={isLoading}
+							>
+								Submit Radio Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{RadioCardList.map((RadioCard) => (
-								<div className="RadioCardItemWrapperFire" key={RadioCard.id}>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{RadioCard.title}</h1>
-											<p>{RadioCard.desc}</p>
-											{RadioCard.imageUrl && (
-												<img
-													className="RadioCardImgFire"
-													src={RadioCard.imageUrl}
-													alt={RadioCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{RadioCardList.map((RadioCard) => (
+									<div className="RadioCardItemWrapperFire" key={RadioCard.id}>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{RadioCard.title}</h1>
+												<p>{RadioCard.desc}</p>
+												{RadioCard.imageUrl && (
+													<img
+														className="RadioCardImgFire"
+														src={RadioCard.imageUrl}
+														alt={RadioCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteRadioCard(RadioCard.id, RadioCard.imageUrl)
+													}
+												>
+													Delete Radio Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteRadioCard(RadioCard.id, RadioCard.imageUrl)
-												}
-											>
-												Delete Radio Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(RadioCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(RadioCard.id, RadioCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(RadioCard.id, RadioCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(RadioCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(RadioCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(RadioCard.id, RadioCard.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(RadioCard.id, RadioCard.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(RadioCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

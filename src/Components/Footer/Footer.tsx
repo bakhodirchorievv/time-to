@@ -1,10 +1,11 @@
 import Link from "next/link";
-import "./Footer.css";
-import "./FooterResponsive.css";
+// import "./Footer.css";
+// import "./FooterResponsive.css";
 
 import { db, auth } from "@/pages/FirebaseConfig";
 import { useEffect, useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
+import Head from "next/head";
 
 const Footer = () => {
 	const scrollToTop = () => {
@@ -84,6 +85,12 @@ const Footer = () => {
 
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Footer/Footer.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Footer/FooterResponsive.css" />
+			</Head>
 			<footer className="footer">
 				<div className="footer-left">
 					<h2 className="overallTitle footer-title">Время обсудить проект</h2>

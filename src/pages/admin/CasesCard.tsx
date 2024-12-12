@@ -1,4 +1,4 @@
-import "../../styles/AdminDashboard/CasesCard/CasesCard.css";
+// import "../../styles/AdminDashboard/CasesCard/CasesCard.css";
 import AdminAuth from "../AdminAuth";
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -21,6 +21,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface Case {
 	id: string;
@@ -207,131 +208,139 @@ const CasesCard = () => {
 	};
 
 	return (
-		<div className="adminWrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addCaseTitle">Add New Case</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Case title..."
-							value={newCaseTitle}
-							onChange={(e) => setnewCaseTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Case desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewCaseImage(e.target.files ? e.target.files[0] : null)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitCase}
-							disabled={isLoading}
-						>
-							Submit Case
-						</button>
-					</div>
-				)}
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/CasesCard/CasesCard.css"
+				/>
+			</Head>
+			<div className="adminWrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addCaseTitle">Add New Case</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Case title..."
+								value={newCaseTitle}
+								onChange={(e) => setnewCaseTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Case desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewCaseImage(e.target.files ? e.target.files[0] : null)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitCase}
+								disabled={isLoading}
+							>
+								Submit Case
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{CaseList.map((Case) => (
-								<div className="caseItemWrapperFire" key={Case.id}>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{Case.title}</h1>
-											<p>{Case.desc}</p>
-											{Case.imageUrl && (
-												<img
-													className="caseImgFire"
-													src={Case.imageUrl}
-													alt={Case.title}
-													width="500"
+					)}
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{CaseList.map((Case) => (
+									<div className="caseItemWrapperFire" key={Case.id}>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{Case.title}</h1>
+												<p>{Case.desc}</p>
+												{Case.imageUrl && (
+													<img
+														className="caseImgFire"
+														src={Case.imageUrl}
+														alt={Case.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() => deleteCase(Case.id, Case.imageUrl)}
+												>
+													Delete Case
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() => deleteCase(Case.id, Case.imageUrl)}
-											>
-												Delete Case
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(Case.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateImage(Case.id, Case.imageUrl)}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() => onDeleteImage(Case.id, Case.imageUrl)}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(Case.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(Case.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateImage(Case.id, Case.imageUrl)}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() => onDeleteImage(Case.id, Case.imageUrl)}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(Case.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

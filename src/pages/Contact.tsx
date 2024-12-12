@@ -1,9 +1,17 @@
-import "../styles/Contacts/Contact.css";
-import "../styles/Contacts/ContactResponsive.css";
+// import "../styles/Contacts/Contact.css";
+// import "../styles/Contacts/ContactResponsive.css";
+
+import Head from "next/head";
 
 const Contact = () => {
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Contacts/Contact.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Contacts/ContactResponsive.css" />
+			</Head>
 			<div className="contact-wrapper">
 				<h2 className="contact-title">Наши контактные данные</h2>
 

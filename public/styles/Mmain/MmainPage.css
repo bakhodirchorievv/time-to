@@ -1021,3 +1021,7 @@ button.hasHover {
 body {
 	cursor: none;
 }
+
+a {
+	text-decoration: none;
+}

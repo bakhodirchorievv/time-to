@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./GuidelineCard.css";
-import "../../styles/AdminDashboard/GuidelineCard/GuidelineCard.css";
+// import "../../styles/AdminDashboard/GuidelineCard/GuidelineCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface GuidelineCard {
 	id: string;
@@ -210,153 +211,163 @@ const GuidelineCard = () => {
 	};
 
 	return (
-		<div className="GuidelineCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/GuidelineCard/GuidelineCard.css"
+				/>
+			</Head>
+			<div className="GuidelineCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addGuidelineCardTitle">Add New Guideline Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Guideline Card title..."
-							value={newGuidelineCardTitle}
-							onChange={(e) => setnewGuidelineCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Guideline Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewGuidelineCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitGuidelineCard}
-							disabled={isLoading}
-						>
-							Submit Guideline Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addGuidelineCardTitle">Add New Guideline Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Guideline Card title..."
+								value={newGuidelineCardTitle}
+								onChange={(e) => setnewGuidelineCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Guideline Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewGuidelineCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitGuidelineCard}
+								disabled={isLoading}
+							>
+								Submit Guideline Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{GuidelineCardList.map((GuidelineCard) => (
-								<div
-									className="GuidelineCardItemWrapperFire"
-									key={GuidelineCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{GuidelineCard.title}</h1>
-											<p>{GuidelineCard.desc}</p>
-											{GuidelineCard.imageUrl && (
-												<img
-													className="GuidelineCardImgFire"
-													src={GuidelineCard.imageUrl}
-													alt={GuidelineCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{GuidelineCardList.map((GuidelineCard) => (
+									<div
+										className="GuidelineCardItemWrapperFire"
+										key={GuidelineCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>
+													{GuidelineCard.title}
+												</h1>
+												<p>{GuidelineCard.desc}</p>
+												{GuidelineCard.imageUrl && (
+													<img
+														className="GuidelineCardImgFire"
+														src={GuidelineCard.imageUrl}
+														alt={GuidelineCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteGuidelineCard(
+															GuidelineCard.id,
+															GuidelineCard.imageUrl
+														)
+													}
+												>
+													Delete Guideline Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteGuidelineCard(
-														GuidelineCard.id,
-														GuidelineCard.imageUrl
-													)
-												}
-											>
-												Delete Guideline Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(GuidelineCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(
-														GuidelineCard.id,
-														GuidelineCard.imageUrl
-													)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(
-														GuidelineCard.id,
-														GuidelineCard.imageUrl
-													)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(GuidelineCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(GuidelineCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(
+															GuidelineCard.id,
+															GuidelineCard.imageUrl
+														)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(
+															GuidelineCard.id,
+															GuidelineCard.imageUrl
+														)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(GuidelineCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

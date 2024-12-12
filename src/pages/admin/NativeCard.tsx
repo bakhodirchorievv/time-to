@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./NativeCard.css";
-import "../../styles/AdminDashboard/NativeCard/NativeCard.css";
+// import "../../styles/AdminDashboard/NativeCard/NativeCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface NativeCard {
 	id: string;
@@ -209,139 +210,152 @@ const NativeCard = () => {
 	};
 
 	return (
-		<div className="NativeCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/NativeCard/NativeCard.css"
+				/>
+			</Head>
+			<div className="NativeCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addNativeCardTitle">Add New Native Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Native Card title..."
-							value={newNativeCardTitle}
-							onChange={(e) => setnewNativeCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Native Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewNativeCardImage(e.target.files ? e.target.files[0] : null)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitNativeCard}
-							disabled={isLoading}
-						>
-							Submit Native Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addNativeCardTitle">Add New Native Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Native Card title..."
+								value={newNativeCardTitle}
+								onChange={(e) => setnewNativeCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Native Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewNativeCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitNativeCard}
+								disabled={isLoading}
+							>
+								Submit Native Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{NativeCardList.map((NativeCard) => (
-								<div className="NativeCardItemWrapperFire" key={NativeCard.id}>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{NativeCard.title}</h1>
-											<p>{NativeCard.desc}</p>
-											{NativeCard.imageUrl && (
-												<img
-													className="NativeCardImgFire"
-													src={NativeCard.imageUrl}
-													alt={NativeCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{NativeCardList.map((NativeCard) => (
+									<div
+										className="NativeCardItemWrapperFire"
+										key={NativeCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{NativeCard.title}</h1>
+												<p>{NativeCard.desc}</p>
+												{NativeCard.imageUrl && (
+													<img
+														className="NativeCardImgFire"
+														src={NativeCard.imageUrl}
+														alt={NativeCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteNativeCard(NativeCard.id, NativeCard.imageUrl)
+													}
+												>
+													Delete Native Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteNativeCard(NativeCard.id, NativeCard.imageUrl)
-												}
-											>
-												Delete Native Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(NativeCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(NativeCard.id, NativeCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(NativeCard.id, NativeCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(NativeCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(NativeCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(NativeCard.id, NativeCard.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(NativeCard.id, NativeCard.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(NativeCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

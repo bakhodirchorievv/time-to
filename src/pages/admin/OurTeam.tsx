@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./OurTeam.css";
-import "../../styles/AdminDashboard/OurTeam/OurTeam.css";
+// import "../../styles/AdminDashboard/OurTeam/OurTeam.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface OurTeam {
 	id: string;
@@ -207,139 +208,147 @@ const OurTeam = () => {
 	};
 
 	return (
-		<div className="OurTeam-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/OurTeam/OurTeam.css"
+				/>
+			</Head>
+			<div className="OurTeam-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addOurTeamTitle">Add New Team Member</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Team Member Name..."
-							value={newOurTeamTitle}
-							onChange={(e) => setnewOurTeamTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Team Member job..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewOurTeamImage(e.target.files ? e.target.files[0] : null)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitOurTeam}
-							disabled={isLoading}
-						>
-							Submit Team Member
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addOurTeamTitle">Add New Team Member</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Team Member Name..."
+								value={newOurTeamTitle}
+								onChange={(e) => setnewOurTeamTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Team Member job..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewOurTeamImage(e.target.files ? e.target.files[0] : null)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitOurTeam}
+								disabled={isLoading}
+							>
+								Submit Team Member
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{OurTeamList.map((OurTeam) => (
-								<div className="OurTeamItemWrapperFire" key={OurTeam.id}>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{OurTeam.title}</h1>
-											<p>{OurTeam.desc}</p>
-											{OurTeam.imageUrl && (
-												<img
-													className="OurTeamImgFire"
-													src={OurTeam.imageUrl}
-													alt={OurTeam.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{OurTeamList.map((OurTeam) => (
+									<div className="OurTeamItemWrapperFire" key={OurTeam.id}>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{OurTeam.title}</h1>
+												<p>{OurTeam.desc}</p>
+												{OurTeam.imageUrl && (
+													<img
+														className="OurTeamImgFire"
+														src={OurTeam.imageUrl}
+														alt={OurTeam.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteOurTeam(OurTeam.id, OurTeam.imageUrl)
+													}
+												>
+													Delete Team Member
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteOurTeam(OurTeam.id, OurTeam.imageUrl)
-												}
-											>
-												Delete Team Member
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(OurTeam.id)}
-											>
-												Update Name
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(OurTeam.id, OurTeam.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(OurTeam.id, OurTeam.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(OurTeam.id)}
-											>
-												Update Job
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(OurTeam.id)}
+												>
+													Update Name
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(OurTeam.id, OurTeam.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(OurTeam.id, OurTeam.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(OurTeam.id)}
+												>
+													Update Job
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

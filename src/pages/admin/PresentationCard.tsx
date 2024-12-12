@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./PresentationCard.css";
-import "../../styles/AdminDashboard/PresentationCard/PresentationCard.css";
+// import "../../styles/AdminDashboard/PresentationCard/PresentationCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface PresentationCard {
 	id: string;
@@ -210,157 +211,165 @@ const PresentationCard = () => {
 	};
 
 	return (
-		<div className="PresentationCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/PresentationCard/PresentationCard.css"
+				/>
+			</Head>
+			<div className="PresentationCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addPresentationCardTitle">
-							Add New Presentation Card
-						</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Presentation Card title..."
-							value={newPresentationCardTitle}
-							onChange={(e) => setnewPresentationCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Presentation Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewPresentationCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitPresentationCard}
-							disabled={isLoading}
-						>
-							Submit Presentation Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addPresentationCardTitle">
+								Add New Presentation Card
+							</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Presentation Card title..."
+								value={newPresentationCardTitle}
+								onChange={(e) => setnewPresentationCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Presentation Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewPresentationCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitPresentationCard}
+								disabled={isLoading}
+							>
+								Submit Presentation Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{PresentationCardList.map((PresentationCard) => (
-								<div
-									className="PresentationCardItemWrapperFire"
-									key={PresentationCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>
-												{PresentationCard.title}
-											</h1>
-											<p>{PresentationCard.desc}</p>
-											{PresentationCard.imageUrl && (
-												<img
-													className="PresentationCardImgFire"
-													src={PresentationCard.imageUrl}
-													alt={PresentationCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{PresentationCardList.map((PresentationCard) => (
+									<div
+										className="PresentationCardItemWrapperFire"
+										key={PresentationCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>
+													{PresentationCard.title}
+												</h1>
+												<p>{PresentationCard.desc}</p>
+												{PresentationCard.imageUrl && (
+													<img
+														className="PresentationCardImgFire"
+														src={PresentationCard.imageUrl}
+														alt={PresentationCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deletePresentationCard(
+															PresentationCard.id,
+															PresentationCard.imageUrl
+														)
+													}
+												>
+													Delete Presentation Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deletePresentationCard(
-														PresentationCard.id,
-														PresentationCard.imageUrl
-													)
-												}
-											>
-												Delete Presentation Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(PresentationCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(
-														PresentationCard.id,
-														PresentationCard.imageUrl
-													)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(
-														PresentationCard.id,
-														PresentationCard.imageUrl
-													)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(PresentationCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(PresentationCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(
+															PresentationCard.id,
+															PresentationCard.imageUrl
+														)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(
+															PresentationCard.id,
+															PresentationCard.imageUrl
+														)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(PresentationCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

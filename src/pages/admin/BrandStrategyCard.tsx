@@ -1,5 +1,5 @@
 import AdminAuth from "../AdminAuth";
-import "../../styles/AdminDashboard/BrandStrategyCard/BrandStrategyCard.css";
+// import "../../styles/AdminDashboard/BrandStrategyCard/BrandStrategyCard.css";
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -21,6 +21,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface BrandStrategyCard {
 	id: string;
@@ -211,157 +212,165 @@ const BrandStrategyCard = () => {
 	};
 
 	return (
-		<div className="BrandStrategyCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/BrandStrategyCard/BrandStrategyCard.css"
+				/>
+			</Head>
+			<div className="BrandStrategyCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addBrandStrategyCardTitle">
-							Add New BrandStrategy Card
-						</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="BrandStrategy Card title..."
-							value={newBrandStrategyCardTitle}
-							onChange={(e) => setnewBrandStrategyCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="BrandStrategy Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewBrandStrategyCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn submitBtn"
-							onClick={onSubmitBrandStrategyCard}
-							disabled={isLoading}
-						>
-							Submit BrandStrategy Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addBrandStrategyCardTitle">
+								Add New BrandStrategy Card
+							</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="BrandStrategy Card title..."
+								value={newBrandStrategyCardTitle}
+								onChange={(e) => setnewBrandStrategyCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="BrandStrategy Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewBrandStrategyCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn submitBtn"
+								onClick={onSubmitBrandStrategyCard}
+								disabled={isLoading}
+							>
+								Submit BrandStrategy Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{BrandStrategyCardList.map((BrandStrategyCard) => (
-								<div
-									className="BrandStrategyCardItemWrapperFire"
-									key={BrandStrategyCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>
-												{BrandStrategyCard.title}
-											</h1>
-											<p>{BrandStrategyCard.desc}</p>
-											{BrandStrategyCard.imageUrl && (
-												<img
-													className="BrandStrategyCardImgFire"
-													src={BrandStrategyCard.imageUrl}
-													alt={BrandStrategyCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{BrandStrategyCardList.map((BrandStrategyCard) => (
+									<div
+										className="BrandStrategyCardItemWrapperFire"
+										key={BrandStrategyCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>
+													{BrandStrategyCard.title}
+												</h1>
+												<p>{BrandStrategyCard.desc}</p>
+												{BrandStrategyCard.imageUrl && (
+													<img
+														className="BrandStrategyCardImgFire"
+														src={BrandStrategyCard.imageUrl}
+														alt={BrandStrategyCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteBrandStrategyCard(
+															BrandStrategyCard.id,
+															BrandStrategyCard.imageUrl
+														)
+													}
+												>
+													Delete BrandStrategy Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteBrandStrategyCard(
-														BrandStrategyCard.id,
-														BrandStrategyCard.imageUrl
-													)
-												}
-											>
-												Delete BrandStrategy Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(BrandStrategyCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(
-														BrandStrategyCard.id,
-														BrandStrategyCard.imageUrl
-													)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(
-														BrandStrategyCard.id,
-														BrandStrategyCard.imageUrl
-													)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(BrandStrategyCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(BrandStrategyCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(
+															BrandStrategyCard.id,
+															BrandStrategyCard.imageUrl
+														)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(
+															BrandStrategyCard.id,
+															BrandStrategyCard.imageUrl
+														)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(BrandStrategyCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

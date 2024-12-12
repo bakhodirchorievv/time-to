@@ -1,7 +1,8 @@
+import Head from "next/head";
 import Link from "next/link";
 
-import "./Header.css";
-import "./HeaderResponsive.css";
+// import "./Header.css";
+// import "./HeaderResponsive.css";
 import { useEffect, useRef } from "react";
 
 const Header = () => {
@@ -116,6 +117,12 @@ const Header = () => {
 
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Header/Header.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Header/HeaderResponsive.css" />
+			</Head>
 			<header id="real-main-header" ref={headerRef} className="header">
 				<Link href={"/"}>
 					<img className="head-img" src="/MainPage/TimeToLogo.svg" alt="" />

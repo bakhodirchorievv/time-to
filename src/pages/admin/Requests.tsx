@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./Requests.css";
-import "../../styles/AdminDashboard/Requests/Requests.css";
+// import "../../styles/AdminDashboard/Requests/Requests.css";
 
 import { db, auth } from "../FirebaseConfig";
 import { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import { onAuthStateChanged } from "firebase/auth";
 
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface Request {
 	id: string;
@@ -69,46 +70,54 @@ const Requests = () => {
 	};
 
 	return (
-		<div className="Request-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/Requests/Requests.css"
+				/>
+			</Head>
+			<div className="Request-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
-						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{RequestList.map((Request) => (
-								<div className="RequestItemWrapperFire" key={Request.id}>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>
-												<span className="name-number">Name:</span>{" "}
-												{Request.Name}
-											</h1>
-											<p>
-												<span className="name-number">Phone Number:</span>{" "}
-												{Request.Number}
-											</p>
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{RequestList.map((Request) => (
+									<div className="RequestItemWrapperFire" key={Request.id}>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>
+													<span className="name-number">Name:</span>{" "}
+													{Request.Name}
+												</h1>
+												<p>
+													<span className="name-number">Phone Number:</span>{" "}
+													{Request.Number}
+												</p>
 
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() => deleteRequest(Request.id)}
-											>
-												Delete Request
-											</button>
-											<br />
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() => deleteRequest(Request.id)}
+												>
+													Delete Request
+												</button>
+												<br />
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

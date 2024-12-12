@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./NamingCard.css";
-import "../../styles/AdminDashboard/NamingCard/NamingCard.css";
+// import "../../styles/AdminDashboard/NamingCard/NamingCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface NamingCard {
 	id: string;
@@ -207,139 +208,152 @@ const NamingCard = () => {
 	};
 
 	return (
-		<div className="NamingCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/NamingCard/NamingCard.css"
+				/>
+			</Head>
+			<div className="NamingCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addNamingCardTitle">Add New Naming Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Naming Card title..."
-							value={newNamingCardTitle}
-							onChange={(e) => setnewNamingCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Naming Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewNamingCardImage(e.target.files ? e.target.files[0] : null)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitNamingCard}
-							disabled={isLoading}
-						>
-							Submit Naming Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addNamingCardTitle">Add New Naming Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Naming Card title..."
+								value={newNamingCardTitle}
+								onChange={(e) => setnewNamingCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Naming Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewNamingCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitNamingCard}
+								disabled={isLoading}
+							>
+								Submit Naming Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{NamingCardList.map((NamingCard) => (
-								<div className="NamingCardItemWrapperFire" key={NamingCard.id}>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{NamingCard.title}</h1>
-											<p>{NamingCard.desc}</p>
-											{NamingCard.imageUrl && (
-												<img
-													className="NamingCardImgFire"
-													src={NamingCard.imageUrl}
-													alt={NamingCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{NamingCardList.map((NamingCard) => (
+									<div
+										className="NamingCardItemWrapperFire"
+										key={NamingCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{NamingCard.title}</h1>
+												<p>{NamingCard.desc}</p>
+												{NamingCard.imageUrl && (
+													<img
+														className="NamingCardImgFire"
+														src={NamingCard.imageUrl}
+														alt={NamingCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteNamingCard(NamingCard.id, NamingCard.imageUrl)
+													}
+												>
+													Delete Naming Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteNamingCard(NamingCard.id, NamingCard.imageUrl)
-												}
-											>
-												Delete Naming Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(NamingCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(NamingCard.id, NamingCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(NamingCard.id, NamingCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(NamingCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(NamingCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(NamingCard.id, NamingCard.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(NamingCard.id, NamingCard.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(NamingCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

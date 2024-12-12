@@ -1,11 +1,12 @@
 import Link from "next/link";
-import "../styles/Cases/Cases.css";
-import "../styles/Cases/CasesResponsive.css";
+// import "../styles/Cases/Cases.css";
+// import "../styles/Cases/CasesResponsive.css";
 
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface Case {
 	id: string;
@@ -42,6 +43,12 @@ const Cases = () => {
 
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Cases/Cases.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Cases/CasesResponsive.css" />
+			</Head>
 			<div className="cases-wrapper">
 				<h3 className="cases-title">Готовые кейсы</h3>
 				{isLoading ? (

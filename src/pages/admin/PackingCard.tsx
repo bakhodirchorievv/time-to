@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./PackingCard.css";
-import "../../styles/AdminDashboard/PackingCard/PackingCard.css";
+// import "../../styles/AdminDashboard/PackingCard/PackingCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface PackingCard {
 	id: string;
@@ -208,147 +209,155 @@ const PackingCard = () => {
 	};
 
 	return (
-		<div className="PackingCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/PackingCard/PackingCard.css"
+				/>
+			</Head>
+			<div className="PackingCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addPackingCardTitle">Add New Packing Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Packing Card title..."
-							value={newPackingCardTitle}
-							onChange={(e) => setnewPackingCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Packing Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewPackingCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitPackingCard}
-							disabled={isLoading}
-						>
-							Submit Packing Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addPackingCardTitle">Add New Packing Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Packing Card title..."
+								value={newPackingCardTitle}
+								onChange={(e) => setnewPackingCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Packing Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewPackingCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitPackingCard}
+								disabled={isLoading}
+							>
+								Submit Packing Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{PackingCardList.map((PackingCard) => (
-								<div
-									className="PackingCardItemWrapperFire"
-									key={PackingCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{PackingCard.title}</h1>
-											<p>{PackingCard.desc}</p>
-											{PackingCard.imageUrl && (
-												<img
-													className="PackingCardImgFire"
-													src={PackingCard.imageUrl}
-													alt={PackingCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{PackingCardList.map((PackingCard) => (
+									<div
+										className="PackingCardItemWrapperFire"
+										key={PackingCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{PackingCard.title}</h1>
+												<p>{PackingCard.desc}</p>
+												{PackingCard.imageUrl && (
+													<img
+														className="PackingCardImgFire"
+														src={PackingCard.imageUrl}
+														alt={PackingCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deletePackingCard(
+															PackingCard.id,
+															PackingCard.imageUrl
+														)
+													}
+												>
+													Delete Packing Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deletePackingCard(
-														PackingCard.id,
-														PackingCard.imageUrl
-													)
-												}
-											>
-												Delete Packing Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(PackingCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(PackingCard.id, PackingCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(PackingCard.id, PackingCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(PackingCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(PackingCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(PackingCard.id, PackingCard.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(PackingCard.id, PackingCard.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(PackingCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

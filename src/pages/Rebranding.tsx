@@ -1,9 +1,20 @@
-import "../styles/Rebranding/Rebranding.css";
-import "../styles/Rebranding/RebrandingResponsive.css";
+// import "../styles/Rebranding/Rebranding.css";
+// import "../styles/Rebranding/RebrandingResponsive.css";
+
+import Head from "next/head";
 
 const Rebranding = () => {
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Rebranding/Rebranding.css" />
+			</Head>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/Rebranding/RebrandingResponsive.css"
+				/>
+			</Head>
 			<div className="rebranding-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">Ребрендинг</h2>

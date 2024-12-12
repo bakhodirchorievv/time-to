@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./MainPage.css";
-import "../../styles/AdminDashboard/MainPageCard/MainPage.css";
+// import "../../styles/AdminDashboard/MainPageCard/MainPage.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface MainPageCard {
 	id: string;
@@ -208,147 +209,161 @@ const MainPageCard = () => {
 	};
 
 	return (
-		<div className="MainPageCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/MainPageCard/MainPage.css"
+				/>
+			</Head>
+			<div className="MainPageCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addMainPageCardTitle">Add New Main Page Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Main Page Card title..."
-							value={newMainPageCardTitle}
-							onChange={(e) => setnewMainPageCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Main Page Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewMainPageCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitMainPageCard}
-							disabled={isLoading}
-						>
-							Submit Main Page Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addMainPageCardTitle">Add New Main Page Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Main Page Card title..."
+								value={newMainPageCardTitle}
+								onChange={(e) => setnewMainPageCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Main Page Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewMainPageCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitMainPageCard}
+								disabled={isLoading}
+							>
+								Submit Main Page Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{MainPageCardList.map((MainPageCard) => (
-								<div
-									className="MainPageCardItemWrapperFire"
-									key={MainPageCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{MainPageCard.title}</h1>
-											<p>{MainPageCard.desc}</p>
-											{MainPageCard.imageUrl && (
-												<img
-													className="MainPageCardImgFire"
-													src={MainPageCard.imageUrl}
-													alt={MainPageCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{MainPageCardList.map((MainPageCard) => (
+									<div
+										className="MainPageCardItemWrapperFire"
+										key={MainPageCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{MainPageCard.title}</h1>
+												<p>{MainPageCard.desc}</p>
+												{MainPageCard.imageUrl && (
+													<img
+														className="MainPageCardImgFire"
+														src={MainPageCard.imageUrl}
+														alt={MainPageCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteMainPageCard(
+															MainPageCard.id,
+															MainPageCard.imageUrl
+														)
+													}
+												>
+													Delete Main Page Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteMainPageCard(
-														MainPageCard.id,
-														MainPageCard.imageUrl
-													)
-												}
-											>
-												Delete Main Page Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(MainPageCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(MainPageCard.id, MainPageCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(MainPageCard.id, MainPageCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(MainPageCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(MainPageCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(
+															MainPageCard.id,
+															MainPageCard.imageUrl
+														)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(
+															MainPageCard.id,
+															MainPageCard.imageUrl
+														)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(MainPageCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

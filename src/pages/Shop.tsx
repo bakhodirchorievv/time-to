@@ -1,11 +1,12 @@
 import Link from "next/link";
-import "../styles/Shop/Shop.css";
-import "../styles/Shop/ShopResponsive.css";
+// import "../styles/Shop/Shop.css";
+// import "../styles/Shop/ShopResponsive.css";
 // get data from firebase
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface ShopCard {
 	id: string;
@@ -44,6 +45,12 @@ const Shop = () => {
 	}, []);
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Shop/Shop.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Shop/ShopResponsive.css" />
+			</Head>
 			<div className="shop-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

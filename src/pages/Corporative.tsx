@@ -1,11 +1,12 @@
 import Link from "next/link";
-import "../styles/Corporative/Corporative.css";
-import "../styles/Corporative/CorporativeResponsive.css";
+// import "../styles/Corporative/Corporative.css";
+// import "../styles/Corporative/CorporativeResponsive.css";
 // get data from firebase
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface CorporativeCard {
 	id: string;
@@ -46,6 +47,15 @@ const Corporative = () => {
 	}, []);
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Corporative/Corporative.css" />
+			</Head>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/Corporative/CorporativeResponsive.css"
+				/>
+			</Head>
 			<div className="corporative-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

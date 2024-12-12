@@ -1,9 +1,17 @@
-import "../styles/SMI/SMI.css";
-import "../styles/SMI/SMIResponsive.css";
+// import "../styles/SMI/SMI.css";
+// import "../styles/SMI/SMIResponsive.css";
+
+import Head from "next/head";
 
 const SMI = () => {
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/SMI/SMI.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/SMI/SMIResponsive.css" />
+			</Head>
 			<div className="SMI-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

@@ -20,3 +20,14 @@ export const googleProvider = new GoogleAuthProvider();
 export const storage = getStorage(app);
 
 export const db = getFirestore(app);
+
+// no use
+const FirebaseConfig = () => {
+	return (
+		<div>
+			<h1>Firebase Configuration Initialized</h1>
+		</div>
+	);
+};
+
+export default FirebaseConfig;

@@ -1,11 +1,12 @@
 import Link from "next/link";
-import "../styles/Expert/Expert.css";
-import "../styles/Expert/ExpertResponsive.css";
+// import "../styles/Expert/Expert.css";
+// import "../styles/Expert/ExpertResponsive.css";
 // get data from firebase
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface ExpertCard {
 	id: string;
@@ -44,6 +45,12 @@ const Expert = () => {
 	}, []);
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Expert/Expert.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Expert/ExpertResponsive.css" />
+			</Head>
 			<div className="expert-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

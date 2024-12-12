@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./TelevisionCard.css";
-import "../../styles/AdminDashboard/TelevisionCard/TelevisionCard.css";
+// import "../../styles/AdminDashboard/TelevisionCard/TelevisionCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface TelevisionCard {
 	id: string;
@@ -208,153 +209,165 @@ const TelevisionCard = () => {
 	};
 
 	return (
-		<div className="TelevisionCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/TelevisionCard/TelevisionCard.css"
+				/>
+			</Head>
+			<div className="TelevisionCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addTelevisionCardTitle">Add New Television Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Television Card title..."
-							value={newTelevisionCardTitle}
-							onChange={(e) => setnewTelevisionCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Television Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewTelevisionCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitTelevisionCard}
-							disabled={isLoading}
-						>
-							Submit Television Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addTelevisionCardTitle">
+								Add New Television Card
+							</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Television Card title..."
+								value={newTelevisionCardTitle}
+								onChange={(e) => setnewTelevisionCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Television Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewTelevisionCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitTelevisionCard}
+								disabled={isLoading}
+							>
+								Submit Television Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{TelevisionCardList.map((TelevisionCard) => (
-								<div
-									className="TelevisionCardItemWrapperFire"
-									key={TelevisionCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{TelevisionCard.title}</h1>
-											<p>{TelevisionCard.desc}</p>
-											{TelevisionCard.imageUrl && (
-												<img
-													className="TelevisionCardImgFire"
-													src={TelevisionCard.imageUrl}
-													alt={TelevisionCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{TelevisionCardList.map((TelevisionCard) => (
+									<div
+										className="TelevisionCardItemWrapperFire"
+										key={TelevisionCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>
+													{TelevisionCard.title}
+												</h1>
+												<p>{TelevisionCard.desc}</p>
+												{TelevisionCard.imageUrl && (
+													<img
+														className="TelevisionCardImgFire"
+														src={TelevisionCard.imageUrl}
+														alt={TelevisionCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteTelevisionCard(
+															TelevisionCard.id,
+															TelevisionCard.imageUrl
+														)
+													}
+												>
+													Delete Television Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteTelevisionCard(
-														TelevisionCard.id,
-														TelevisionCard.imageUrl
-													)
-												}
-											>
-												Delete Television Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(TelevisionCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(
-														TelevisionCard.id,
-														TelevisionCard.imageUrl
-													)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(
-														TelevisionCard.id,
-														TelevisionCard.imageUrl
-													)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(TelevisionCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
-			</div>
-		</div>
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(TelevisionCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(
+															TelevisionCard.id,
+															TelevisionCard.imageUrl
+														)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(
+															TelevisionCard.id,
+															TelevisionCard.imageUrl
+														)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(TelevisionCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
+			</div>{" "}
+		</>
 	);
 };
 

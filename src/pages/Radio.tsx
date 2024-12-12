@@ -1,9 +1,17 @@
-import "../styles/Radio/Radio.css";
-import "../styles/Radio/RadioResponsive.css";
+// import "../styles/Radio/Radio.css";
+// import "../styles/Radio/RadioResponsive.css";
+
+import Head from "next/head";
 
 const Radio = () => {
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Radio/Radio.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Radio/RadioResponsive.css" />
+			</Head>
 			<div className="radio-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

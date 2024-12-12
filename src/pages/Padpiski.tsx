@@ -1,9 +1,17 @@
-import "../styles/Padpiski/Padpiski.css";
-import "../styles/Padpiski/PadpiskiResponsive.css";
+// import "../styles/Padpiski/Padpiski.css";
+// import "../styles/Padpiski/PadpiskiResponsive.css";
+
+import Head from "next/head";
 
 const Padpiski = () => {
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Padpiski/Padpiski.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Padpiski/PadpiskiResponsive.css" />
+			</Head>
 			<div className="padpiski-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

@@ -4,8 +4,9 @@ import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
-import "../styles/CasesPart/CasesPart.css";
-import "../styles/CasesPart/CasesPartResponsive.css";
+import Head from "next/head";
+// import "../styles/CasesPart/CasesPart.css";
+// import "../styles/CasesPart/CasesPartResponsive.css";
 
 interface Case {
 	id: string;
@@ -76,92 +77,103 @@ const CasesPart = () => {
 	}, [isDataLoaded]);
 
 	return (
-		<div className="cases-wrapper hidden">
-			<h2 className="case-title getBlock overallTitle topTitle">Кейсы</h2>
-
-			<div className="case-left">
-				{caseList.length &&
-					caseList.slice(0, 3).map((caseItem, index) => (
-						<div
-							className={`left-case-item fromCenter ${
-								index === 2 ? "bigger" : ""
-							}`}
-							key={caseItem.id}
-						>
-							<div
-								className="whiteBack"
-								style={{ backgroundImage: `url(${caseItem.imageUrl})` }}
-							></div>
-							<h3 className="caseTitle">{caseItem.title || "Valor"}</h3>
-							<p className="case-desc">
-								{caseItem.desc || "Ювелирные изделия"}
-							</p>
-							<div className="caseBtnWrapper">
-								<Link href={"/Logo"}>
-									<button className="overallBtn caseBtn">Логотип</button>
-								</Link>
-								<button className="overallBtn caseBtn">Брендинг</button>
-								<Link href={"/Site"}>
-									<button className="overallBtn caseBtn">Сайт</button>
-								</Link>
-							</div>
-						</div>
-					))}
-			</div>
-
-			<div className="case-right">
-				<h2 className="case-title getNone overallTitle">Кейсы</h2>
-				{isLoading ? (
-					<div className="loading-indicator">
-						<ClipLoader size={50} color={"#eee"} loading={isLoading} />
-					</div>
-				) : (
-					caseList.length &&
-					caseList.slice(3, 5).map((caseItem, index) => (
-						<div
-							className={`left-case-item fromCenter ${
-								index === 2 ? "bigger" : ""
-							}`}
-							key={caseItem.id}
-						>
-							<div
-								className="whiteBack"
-								style={{ backgroundImage: `url(${caseItem.imageUrl})` }}
-							></div>
-							<h3 className="caseTitle">{caseItem.title || "Valor"}</h3>
-							<p className="case-desc">
-								{caseItem.desc || "Ювелирные изделия"}
-							</p>
-							<div className="caseBtnWrapper">
-								<Link href={"/Logo"}>
-									<button className="overallBtn caseBtn">Логотип</button>
-								</Link>
-								<button className="overallBtn caseBtn">Брендинг</button>
-								<Link href={"/Site"}>
-									<button className="overallBtn caseBtn">Сайт</button>
-								</Link>
-							</div>
-						</div>
-					))
-				)}
-				<Link href={"/Cases"}>
-					<button
-						style={{ display: isLoading ? "none" : "block" }}
-						className="overallBtn hasHover moreCaseBtn hidden"
-					>
-						больше кейсов →
-					</button>
-				</Link>
-			</div>
-
-			{isDataLoaded && (
-				<img
-					src="/MainPage/bckg-layer.png"
-					alt=""
-					className="bckg-layer CasesParthidden getNone"
+		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/CasesPart/CasesPart.css" />
+			</Head>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/CasesPart/CasesPartResponsive.css"
 				/>
-			)}
-		</div>
+			</Head>
+			<div className="cases-wrapper hidden">
+				<h2 className="case-title getBlock overallTitle topTitle">Кейсы</h2>
+
+				<div className="case-left">
+					{caseList.length &&
+						caseList.slice(0, 3).map((caseItem, index) => (
+							<div
+								className={`left-case-item fromCenter ${
+									index === 2 ? "bigger" : ""
+								}`}
+								key={caseItem.id}
+							>
+								<div
+									className="whiteBack"
+									style={{ backgroundImage: `url(${caseItem.imageUrl})` }}
+								></div>
+								<h3 className="caseTitle">{caseItem.title || "Valor"}</h3>
+								<p className="case-desc">
+									{caseItem.desc || "Ювелирные изделия"}
+								</p>
+								<div className="caseBtnWrapper">
+									<Link href={"/Logo"}>
+										<button className="overallBtn caseBtn">Логотип</button>
+									</Link>
+									<button className="overallBtn caseBtn">Брендинг</button>
+									<Link href={"/Site"}>
+										<button className="overallBtn caseBtn">Сайт</button>
+									</Link>
+								</div>
+							</div>
+						))}
+				</div>
+
+				<div className="case-right">
+					<h2 className="case-title getNone overallTitle">Кейсы</h2>
+					{isLoading ? (
+						<div className="loading-indicator">
+							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+						</div>
+					) : (
+						caseList.length &&
+						caseList.slice(3, 5).map((caseItem, index) => (
+							<div
+								className={`left-case-item fromCenter ${
+									index === 2 ? "bigger" : ""
+								}`}
+								key={caseItem.id}
+							>
+								<div
+									className="whiteBack"
+									style={{ backgroundImage: `url(${caseItem.imageUrl})` }}
+								></div>
+								<h3 className="caseTitle">{caseItem.title || "Valor"}</h3>
+								<p className="case-desc">
+									{caseItem.desc || "Ювелирные изделия"}
+								</p>
+								<div className="caseBtnWrapper">
+									<Link href={"/Logo"}>
+										<button className="overallBtn caseBtn">Логотип</button>
+									</Link>
+									<button className="overallBtn caseBtn">Брендинг</button>
+									<Link href={"/Site"}>
+										<button className="overallBtn caseBtn">Сайт</button>
+									</Link>
+								</div>
+							</div>
+						))
+					)}
+					<Link href={"/Cases"}>
+						<button
+							style={{ display: isLoading ? "none" : "block" }}
+							className="overallBtn hasHover moreCaseBtn hidden"
+						>
+							больше кейсов →
+						</button>
+					</Link>
+				</div>
+
+				{isDataLoaded && (
+					<img
+						src="/MainPage/bckg-layer.png"
+						alt=""
+						className="bckg-layer CasesParthidden getNone"
+					/>
+				)}
+			</div>
+		</>
 	);
 };
 

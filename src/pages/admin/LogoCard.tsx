@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./LogoCard.css";
-import "../../styles/AdminDashboard/LogoCard/LogoCard.css";
+// import "../../styles/AdminDashboard/LogoCard/LogoCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface LogoCard {
 	id: string;
@@ -206,139 +207,147 @@ const LogoCard = () => {
 	};
 
 	return (
-		<div className="LogoCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/LogoCard/LogoCard.css"
+				/>
+			</Head>
+			<div className="LogoCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addLogoCardTitle">Add New Logo Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Logo Card title..."
-							value={newLogoCardTitle}
-							onChange={(e) => setnewLogoCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Logo Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewLogoCardImage(e.target.files ? e.target.files[0] : null)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitLogoCard}
-							disabled={isLoading}
-						>
-							Submit Logo Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addLogoCardTitle">Add New Logo Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Logo Card title..."
+								value={newLogoCardTitle}
+								onChange={(e) => setnewLogoCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Logo Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewLogoCardImage(e.target.files ? e.target.files[0] : null)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitLogoCard}
+								disabled={isLoading}
+							>
+								Submit Logo Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{LogoCardList.map((LogoCard) => (
-								<div className="LogoCardItemWrapperFire" key={LogoCard.id}>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{LogoCard.title}</h1>
-											<p>{LogoCard.desc}</p>
-											{LogoCard.imageUrl && (
-												<img
-													className="LogoCardImgFire"
-													src={LogoCard.imageUrl}
-													alt={LogoCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{LogoCardList.map((LogoCard) => (
+									<div className="LogoCardItemWrapperFire" key={LogoCard.id}>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{LogoCard.title}</h1>
+												<p>{LogoCard.desc}</p>
+												{LogoCard.imageUrl && (
+													<img
+														className="LogoCardImgFire"
+														src={LogoCard.imageUrl}
+														alt={LogoCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteLogoCard(LogoCard.id, LogoCard.imageUrl)
+													}
+												>
+													Delete Logo Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteLogoCard(LogoCard.id, LogoCard.imageUrl)
-												}
-											>
-												Delete Logo Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(LogoCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(LogoCard.id, LogoCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(LogoCard.id, LogoCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(LogoCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(LogoCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(LogoCard.id, LogoCard.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(LogoCard.id, LogoCard.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(LogoCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

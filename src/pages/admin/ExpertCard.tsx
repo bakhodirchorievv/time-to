@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./ExpertCard.css";
-import "../../styles/AdminDashboard/ExpertCard/ExpertCard.css";
+// import "../../styles/AdminDashboard/ExpertCard/ExpertCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface ExpertCard {
 	id: string;
@@ -208,139 +209,152 @@ const ExpertCard = () => {
 	};
 
 	return (
-		<div className="ExpertCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/ExpertCard/ExpertCard.css"
+				/>
+			</Head>
+			<div className="ExpertCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addExpertCardTitle">Add New Expert Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Expert Card title..."
-							value={newExpertCardTitle}
-							onChange={(e) => setnewExpertCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Expert Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewExpertCardImage(e.target.files ? e.target.files[0] : null)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitExpertCard}
-							disabled={isLoading}
-						>
-							Submit Expert Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addExpertCardTitle">Add New Expert Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Expert Card title..."
+								value={newExpertCardTitle}
+								onChange={(e) => setnewExpertCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Expert Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewExpertCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitExpertCard}
+								disabled={isLoading}
+							>
+								Submit Expert Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{ExpertCardList.map((ExpertCard) => (
-								<div className="ExpertCardItemWrapperFire" key={ExpertCard.id}>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{ExpertCard.title}</h1>
-											<p>{ExpertCard.desc}</p>
-											{ExpertCard.imageUrl && (
-												<img
-													className="ExpertCardImgFire"
-													src={ExpertCard.imageUrl}
-													alt={ExpertCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{ExpertCardList.map((ExpertCard) => (
+									<div
+										className="ExpertCardItemWrapperFire"
+										key={ExpertCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{ExpertCard.title}</h1>
+												<p>{ExpertCard.desc}</p>
+												{ExpertCard.imageUrl && (
+													<img
+														className="ExpertCardImgFire"
+														src={ExpertCard.imageUrl}
+														alt={ExpertCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteExpertCard(ExpertCard.id, ExpertCard.imageUrl)
+													}
+												>
+													Delete Expert Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteExpertCard(ExpertCard.id, ExpertCard.imageUrl)
-												}
-											>
-												Delete Expert Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(ExpertCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(ExpertCard.id, ExpertCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(ExpertCard.id, ExpertCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(ExpertCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(ExpertCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(ExpertCard.id, ExpertCard.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(ExpertCard.id, ExpertCard.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(ExpertCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

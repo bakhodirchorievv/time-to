@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./CorporativeCard.css";
-import "../../styles/AdminDashboard/CorporativeCard/CorporativeCard.css";
+// import "../../styles/AdminDashboard/CorporativeCard/CorporativeCard.css";
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -22,6 +22,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface CorporativeCard {
 	id: string;
@@ -209,157 +210,165 @@ const CorporativeCard = () => {
 	};
 
 	return (
-		<div className="CorporativeCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/CorporativeCard/CorporativeCard.css"
+				/>
+			</Head>
+			<div className="CorporativeCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addCorporativeCardTitle">
-							Add New Corporative Card
-						</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Corporative Card title..."
-							value={newCorporativeCardTitle}
-							onChange={(e) => setnewCorporativeCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Corporative Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewCorporativeCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitCorporativeCard}
-							disabled={isLoading}
-						>
-							Submit Corporative Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addCorporativeCardTitle">
+								Add New Corporative Card
+							</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Corporative Card title..."
+								value={newCorporativeCardTitle}
+								onChange={(e) => setnewCorporativeCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Corporative Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewCorporativeCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitCorporativeCard}
+								disabled={isLoading}
+							>
+								Submit Corporative Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{CorporativeCardList.map((CorporativeCard) => (
-								<div
-									className="CorporativeCardItemWrapperFire"
-									key={CorporativeCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>
-												{CorporativeCard.title}
-											</h1>
-											<p>{CorporativeCard.desc}</p>
-											{CorporativeCard.imageUrl && (
-												<img
-													className="CorporativeCardImgFire"
-													src={CorporativeCard.imageUrl}
-													alt={CorporativeCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{CorporativeCardList.map((CorporativeCard) => (
+									<div
+										className="CorporativeCardItemWrapperFire"
+										key={CorporativeCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>
+													{CorporativeCard.title}
+												</h1>
+												<p>{CorporativeCard.desc}</p>
+												{CorporativeCard.imageUrl && (
+													<img
+														className="CorporativeCardImgFire"
+														src={CorporativeCard.imageUrl}
+														alt={CorporativeCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteCorporativeCard(
+															CorporativeCard.id,
+															CorporativeCard.imageUrl
+														)
+													}
+												>
+													Delete Corporative Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteCorporativeCard(
-														CorporativeCard.id,
-														CorporativeCard.imageUrl
-													)
-												}
-											>
-												Delete Corporative Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(CorporativeCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(
-														CorporativeCard.id,
-														CorporativeCard.imageUrl
-													)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(
-														CorporativeCard.id,
-														CorporativeCard.imageUrl
-													)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(CorporativeCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(CorporativeCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(
+															CorporativeCard.id,
+															CorporativeCard.imageUrl
+														)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(
+															CorporativeCard.id,
+															CorporativeCard.imageUrl
+														)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(CorporativeCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

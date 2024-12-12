@@ -1,11 +1,12 @@
 import Link from "next/link";
-import "../styles/Partner/Partner.css";
-import "../styles/Partner/PartnerResponsive.css";
+// import "../styles/Partner/Partner.css";
+// import "../styles/Partner/PartnerResponsive.css";
 // get data from firebase
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface PartnerCard {
 	id: string;
@@ -44,6 +45,12 @@ const Partner = () => {
 	}, []);
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Partner/Partner.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Partner/PartnerResponsive.css" />
+			</Head>
 			<div className="partner-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

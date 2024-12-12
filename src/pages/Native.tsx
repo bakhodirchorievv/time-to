@@ -1,9 +1,17 @@
-import "../styles/Native/Native.css";
-import "../styles/Native/NativeResponsive.css";
+// import "../styles/Native/Native.css";
+// import "../styles/Native/NativeResponsive.css";
+
+import Head from "next/head";
 
 const Native = () => {
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Native/Native.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Native/NativeResponsive.css" />
+			</Head>
 			<div className="native-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

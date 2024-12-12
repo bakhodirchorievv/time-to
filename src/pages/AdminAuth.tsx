@@ -10,8 +10,9 @@ import {
 import { addDoc, collection, getDocs, deleteDoc } from "firebase/firestore";
 import { db } from "./FirebaseConfig";
 
-import "./AdminAuth.css";
+// import "./AdminAuth.css";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 const AdminAuth = () => {
 	const [email, setEmail] = useState("");
@@ -168,6 +169,10 @@ const AdminAuth = () => {
 
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/AdminDashboard/AdminAuth.css" />
+			</Head>
+
 			{isLoggedIn ? (
 				<div>
 					<>

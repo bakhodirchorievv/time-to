@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./SouvenirCard.css";
-import "../../styles/AdminDashboard/SouvenirCard/SouvenirCard.css";
+// import "../../styles/AdminDashboard/SouvenirCard/SouvenirCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface SouvenirCard {
 	id: string;
@@ -209,147 +210,161 @@ const SouvenirCard = () => {
 	};
 
 	return (
-		<div className="SouvenirCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/SouvenirCard/SouvenirCard.css"
+				/>
+			</Head>
+			<div className="SouvenirCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addSouvenirCardTitle">Add New Souvenir Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Souvenir Card title..."
-							value={newSouvenirCardTitle}
-							onChange={(e) => setnewSouvenirCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Souvenir Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewSouvenirCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitSouvenirCard}
-							disabled={isLoading}
-						>
-							Submit Souvenir Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addSouvenirCardTitle">Add New Souvenir Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Souvenir Card title..."
+								value={newSouvenirCardTitle}
+								onChange={(e) => setnewSouvenirCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Souvenir Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewSouvenirCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitSouvenirCard}
+								disabled={isLoading}
+							>
+								Submit Souvenir Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{SouvenirCardList.map((SouvenirCard) => (
-								<div
-									className="SouvenirCardItemWrapperFire"
-									key={SouvenirCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{SouvenirCard.title}</h1>
-											<p>{SouvenirCard.desc}</p>
-											{SouvenirCard.imageUrl && (
-												<img
-													className="SouvenirCardImgFire"
-													src={SouvenirCard.imageUrl}
-													alt={SouvenirCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{SouvenirCardList.map((SouvenirCard) => (
+									<div
+										className="SouvenirCardItemWrapperFire"
+										key={SouvenirCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{SouvenirCard.title}</h1>
+												<p>{SouvenirCard.desc}</p>
+												{SouvenirCard.imageUrl && (
+													<img
+														className="SouvenirCardImgFire"
+														src={SouvenirCard.imageUrl}
+														alt={SouvenirCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteSouvenirCard(
+															SouvenirCard.id,
+															SouvenirCard.imageUrl
+														)
+													}
+												>
+													Delete Souvenir Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteSouvenirCard(
-														SouvenirCard.id,
-														SouvenirCard.imageUrl
-													)
-												}
-											>
-												Delete Souvenir Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(SouvenirCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(SouvenirCard.id, SouvenirCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(SouvenirCard.id, SouvenirCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(SouvenirCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
-			</div>
-		</div>
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(SouvenirCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(
+															SouvenirCard.id,
+															SouvenirCard.imageUrl
+														)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(
+															SouvenirCard.id,
+															SouvenirCard.imageUrl
+														)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(SouvenirCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
+			</div>{" "}
+		</>
 	);
 };
 

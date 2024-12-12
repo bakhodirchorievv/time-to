@@ -1,11 +1,17 @@
-// import "./Television.css";
-// import "./TeleResponsive.css";
-import "../styles/Television/Television.css";
-import "../styles/Television/TeleResponsive.css";
+// import "../styles/Television/Television.css";
+// import "../styles/Television/TeleResponsive.css";
+
+import Head from "next/head";
 
 const Television = () => {
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Television/Television.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Television/TeleResponsive.css" />
+			</Head>
 			<div className="television-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

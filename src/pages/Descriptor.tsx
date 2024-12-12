@@ -1,11 +1,12 @@
 import Link from "next/link";
-import "../styles/Descriptor/Descriptor.css";
-import "../styles/Descriptor/DescriptorResponsive.css";
+// import "../styles/Descriptor/Descriptor.css";
+// import "../styles/Descriptor/DescriptorResponsive.css";
 // get data from firebase
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface DescriptorCard {
 	id: string;
@@ -46,6 +47,15 @@ const Descriptor = () => {
 	}, []);
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Descriptor/Descriptor.css" />
+			</Head>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/Descriptor/DescriptorResponsive.css"
+				/>
+			</Head>
 			<div className="descriptor-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

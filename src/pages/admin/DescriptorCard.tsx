@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./DescriptorCard.css";
-import "../../styles/AdminDashboard/DescriptorCard/DescriptorCard.css";
+// import "../../styles/AdminDashboard/DescriptorCard/DescriptorCard.css";
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -22,6 +22,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface DescriptorCard {
 	id: string;
@@ -209,153 +210,165 @@ const DescriptorCard = () => {
 	};
 
 	return (
-		<div className="DescriptorCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/DescriptorCard/DescriptorCard.css"
+				/>
+			</Head>
+			<div className="DescriptorCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addDescriptorCardTitle">Add New Descriptor Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Descriptor Card title..."
-							value={newDescriptorCardTitle}
-							onChange={(e) => setnewDescriptorCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Descriptor Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewDescriptorCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitDescriptorCard}
-							disabled={isLoading}
-						>
-							Submit Descriptor Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addDescriptorCardTitle">
+								Add New Descriptor Card
+							</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Descriptor Card title..."
+								value={newDescriptorCardTitle}
+								onChange={(e) => setnewDescriptorCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Descriptor Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewDescriptorCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitDescriptorCard}
+								disabled={isLoading}
+							>
+								Submit Descriptor Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{DescriptorCardList.map((DescriptorCard) => (
-								<div
-									className="DescriptorCardItemWrapperFire"
-									key={DescriptorCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{DescriptorCard.title}</h1>
-											<p>{DescriptorCard.desc}</p>
-											{DescriptorCard.imageUrl && (
-												<img
-													className="DescriptorCardImgFire"
-													src={DescriptorCard.imageUrl}
-													alt={DescriptorCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{DescriptorCardList.map((DescriptorCard) => (
+									<div
+										className="DescriptorCardItemWrapperFire"
+										key={DescriptorCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>
+													{DescriptorCard.title}
+												</h1>
+												<p>{DescriptorCard.desc}</p>
+												{DescriptorCard.imageUrl && (
+													<img
+														className="DescriptorCardImgFire"
+														src={DescriptorCard.imageUrl}
+														alt={DescriptorCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteDescriptorCard(
+															DescriptorCard.id,
+															DescriptorCard.imageUrl
+														)
+													}
+												>
+													Delete Descriptor Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteDescriptorCard(
-														DescriptorCard.id,
-														DescriptorCard.imageUrl
-													)
-												}
-											>
-												Delete Descriptor Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(DescriptorCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(
-														DescriptorCard.id,
-														DescriptorCard.imageUrl
-													)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(
-														DescriptorCard.id,
-														DescriptorCard.imageUrl
-													)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(DescriptorCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(DescriptorCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(
+															DescriptorCard.id,
+															DescriptorCard.imageUrl
+														)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(
+															DescriptorCard.id,
+															DescriptorCard.imageUrl
+														)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(DescriptorCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

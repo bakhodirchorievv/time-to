@@ -1,6 +1,6 @@
 import Link from "next/link";
-import "../styles/BrandStrategy/BrandStrategy.css";
-import "../styles/BrandStrategy/BrandResponsive.css";
+// import "../styles/BrandStrategy/BrandStrategy.css";
+// import "../styles/BrandStrategy/BrandResponsive.css";
 import { useRef } from "react";
 
 // get data from firebase
@@ -9,6 +9,7 @@ import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface BrandStrategyCard {
 	id: string;
@@ -64,6 +65,15 @@ const BrandStrategy = () => {
 
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/BrandStrategy/BrandStrategy.css" />
+			</Head>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/BrandStrategy/BrandResponsive.css"
+				/>
+			</Head>
 			<div className="bottomOfHeader">
 				<h1 className="head-title">Бренд Стратегия</h1>
 

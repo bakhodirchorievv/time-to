@@ -1,9 +1,17 @@
-import "../styles/Market/Market.css";
-import "../styles/Market/MarketResponsive.css";
+// import "../styles/Market/Market.css";
+// import "../styles/Market/MarketResponsive.css";
+
+import Head from "next/head";
 
 const Market = () => {
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Market/Market.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Market/MarketResponsive.css" />
+			</Head>
 			<div className="market-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

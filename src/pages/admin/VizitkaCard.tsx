@@ -1,6 +1,6 @@
 import AdminAuth from "../AdminAuth";
 // import "./VizitkaCard.css";
-import "../../styles/AdminDashboard/VizitkaCard/VizitkaCard.css";
+// import "../../styles/AdminDashboard/VizitkaCard/VizitkaCard.css";
 
 import { db, auth, storage } from "../FirebaseConfig";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 import NavBar from "./NavBar";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface VizitkaCard {
 	id: string;
@@ -208,147 +209,155 @@ const VizitkaCard = () => {
 	};
 
 	return (
-		<div className="VizitkaCard-admin-wrapper">
-			{userEmail && <NavBar />}
-			<div className="right-side-wrapper">
-				<AdminAuth />
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/AdminDashboard/VizitkaCard/VizitkaCard.css"
+				/>
+			</Head>
+			<div className="VizitkaCard-admin-wrapper">
+				{userEmail && <NavBar />}
+				<div className="right-side-wrapper">
+					<AdminAuth />
 
-				{userEmail && (
-					<div className="controlAuthWrapper">
-						<h2 className="addVizitkaCardTitle">Add New Vizitka Card</h2>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Vizitka Card title..."
-							value={newVizitkaCardTitle}
-							onChange={(e) => setnewVizitkaCardTitle(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="text"
-							placeholder="Vizitka Card desc..."
-							value={newdesc}
-							onChange={(e) => setNewdesc(e.target.value)}
-						/>
-						<input
-							className="admin-input"
-							type="file"
-							ref={fileInputRef}
-							onChange={(e) =>
-								setNewVizitkaCardImage(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-						<button
-							className="admin-btn"
-							onClick={onSubmitVizitkaCard}
-							disabled={isLoading}
-						>
-							Submit Vizitka Card
-						</button>
-					</div>
-				)}
-
-				{userEmail &&
-					(isLoading ? (
-						<div className="loading-indicator">
-							<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+					{userEmail && (
+						<div className="controlAuthWrapper">
+							<h2 className="addVizitkaCardTitle">Add New Vizitka Card</h2>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Vizitka Card title..."
+								value={newVizitkaCardTitle}
+								onChange={(e) => setnewVizitkaCardTitle(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="text"
+								placeholder="Vizitka Card desc..."
+								value={newdesc}
+								onChange={(e) => setNewdesc(e.target.value)}
+							/>
+							<input
+								className="admin-input"
+								type="file"
+								ref={fileInputRef}
+								onChange={(e) =>
+									setNewVizitkaCardImage(
+										e.target.files ? e.target.files[0] : null
+									)
+								}
+							/>
+							<button
+								className="admin-btn"
+								onClick={onSubmitVizitkaCard}
+								disabled={isLoading}
+							>
+								Submit Vizitka Card
+							</button>
 						</div>
-					) : (
-						<div className="controlDataWrapper">
-							{VizitkaCardList.map((VizitkaCard) => (
-								<div
-									className="VizitkaCardItemWrapperFire"
-									key={VizitkaCard.id}
-								>
-									{userEmail && (
-										<>
-											<h1 style={{ color: "white" }}>{VizitkaCard.title}</h1>
-											<p>{VizitkaCard.desc}</p>
-											{VizitkaCard.imageUrl && (
-												<img
-													className="VizitkaCardImgFire"
-													src={VizitkaCard.imageUrl}
-													alt={VizitkaCard.title}
-													width="500"
+					)}
+
+					{userEmail &&
+						(isLoading ? (
+							<div className="loading-indicator">
+								<ClipLoader size={50} color={"#eee"} loading={isLoading} />
+							</div>
+						) : (
+							<div className="controlDataWrapper">
+								{VizitkaCardList.map((VizitkaCard) => (
+									<div
+										className="VizitkaCardItemWrapperFire"
+										key={VizitkaCard.id}
+									>
+										{userEmail && (
+											<>
+												<h1 style={{ color: "white" }}>{VizitkaCard.title}</h1>
+												<p>{VizitkaCard.desc}</p>
+												{VizitkaCard.imageUrl && (
+													<img
+														className="VizitkaCardImgFire"
+														src={VizitkaCard.imageUrl}
+														alt={VizitkaCard.title}
+														width="500"
+													/>
+												)}
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														deleteVizitkaCard(
+															VizitkaCard.id,
+															VizitkaCard.imageUrl
+														)
+													}
+												>
+													Delete Vizitka Card
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													onChange={(e) => setUpdatedTitle(e.target.value)}
+													type="text"
+													value={updatedTitle}
+													placeholder="new title..."
 												/>
-											)}
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													deleteVizitkaCard(
-														VizitkaCard.id,
-														VizitkaCard.imageUrl
-													)
-												}
-											>
-												Delete Vizitka Card
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												onChange={(e) => setUpdatedTitle(e.target.value)}
-												type="text"
-												value={updatedTitle}
-												placeholder="new title..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpdateTitle(VizitkaCard.id)}
-											>
-												Update Title
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="file"
-												ref={updatedImageFile}
-												onChange={(e) =>
-													setUpdatedImage(
-														e.target.files ? e.target.files[0] : null
-													)
-												}
-											/>
-											<button
-												className="admin-btn"
-												onClick={() =>
-													onUpdateImage(VizitkaCard.id, VizitkaCard.imageUrl)
-												}
-											>
-												Update Image
-											</button>
-											<br />
-											<button
-												className="admin-btn deleteBtn"
-												onClick={() =>
-													onDeleteImage(VizitkaCard.id, VizitkaCard.imageUrl)
-												}
-											>
-												Delete Image
-											</button>
-											<br />
-											<input
-												className="admin-input"
-												type="text"
-												onChange={(e) => setupdatedDesc(e.target.value)}
-												value={updatedDesc}
-												placeholder="new desc..."
-											/>
-											<button
-												className="admin-btn"
-												onClick={() => onUpDatedesc(VizitkaCard.id)}
-											>
-												Update Desc
-											</button>
-										</>
-									)}
-								</div>
-							))}
-						</div>
-					))}
+												<button
+													className="admin-btn"
+													onClick={() => onUpdateTitle(VizitkaCard.id)}
+												>
+													Update Title
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="file"
+													ref={updatedImageFile}
+													onChange={(e) =>
+														setUpdatedImage(
+															e.target.files ? e.target.files[0] : null
+														)
+													}
+												/>
+												<button
+													className="admin-btn"
+													onClick={() =>
+														onUpdateImage(VizitkaCard.id, VizitkaCard.imageUrl)
+													}
+												>
+													Update Image
+												</button>
+												<br />
+												<button
+													className="admin-btn deleteBtn"
+													onClick={() =>
+														onDeleteImage(VizitkaCard.id, VizitkaCard.imageUrl)
+													}
+												>
+													Delete Image
+												</button>
+												<br />
+												<input
+													className="admin-input"
+													type="text"
+													onChange={(e) => setupdatedDesc(e.target.value)}
+													value={updatedDesc}
+													placeholder="new desc..."
+												/>
+												<button
+													className="admin-btn"
+													onClick={() => onUpDatedesc(VizitkaCard.id)}
+												>
+													Update Desc
+												</button>
+											</>
+										)}
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

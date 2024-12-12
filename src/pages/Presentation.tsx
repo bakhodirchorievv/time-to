@@ -1,12 +1,13 @@
 import Link from "next/link";
 
-import "../styles/Presentatiton/Presentation.css";
-import "../styles/Presentatiton/PresentResponsive.css";
+// import "../styles/Presentatiton/Presentation.css";
+// import "../styles/Presentatiton/PresentResponsive.css";
 // get data from firebase
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface PresentationCard {
 	id: string;
@@ -47,6 +48,15 @@ const Presentation = () => {
 	}, []);
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Presentatiton/Presentation.css" />
+			</Head>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="/styles/Presentatiton/PresentResponsive.css"
+				/>
+			</Head>
 			<div className="presentation-wrapper">
 				<div className="innerHead">
 					<h2 className="main-title">

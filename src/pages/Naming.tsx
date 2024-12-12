@@ -1,11 +1,12 @@
 import Link from "next/link";
-import "../styles/Naming/Naming.css";
-import "../styles/Naming/NamingResponsive.css";
+// import "../styles/Naming/Naming.css";
+// import "../styles/Naming/NamingResponsive.css";
 // get data from firebase
 import { db } from "./FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
+import Head from "next/head";
 
 interface NamingCard {
 	id: string;
@@ -44,6 +45,12 @@ const Naming = () => {
 	}, []);
 	return (
 		<>
+			<Head>
+				<link rel="stylesheet" href="/styles/Naming/Naming.css" />
+			</Head>
+			<Head>
+				<link rel="stylesheet" href="/styles/Naming/NamingResponsive.css" />
+			</Head>
 			<div className="naming-wrapper">
 				<div>
 					<h2 className="main-title">
